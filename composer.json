@@ -1,0 +1,25 @@
+{
+  "name": "goodmain/bing-search",
+  "type": "library",
+  "description": "Library work with BingSearch API",
+  "keywords": ["bing", "bingsearch", "api"],
+  "license": "GNU",
+  "homepage": "",
+  "authors": [
+    {
+      "name": "Goodmain",
+      "email": "iskrinvv@yandex.ru",
+      "role": "Developer"
+    }
+  ],
+  "require": {
+    "php": ">=5.4.0"
+  },
+  "require-dev": {
+  },
+  "autoload": {
+    "psr-4": {
+      "Goodmain\\BingSearch\\": "src"
+    }
+  }
+}
