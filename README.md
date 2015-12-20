@@ -1,1 +1,2 @@
-# BingSearch
+# BingSearch API
+

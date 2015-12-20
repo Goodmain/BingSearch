@@ -14,7 +14,7 @@ class Response
      */
     protected $count = 0;
     /**
-     * Time spent on request
+     * Time spent on request, in seconds
      * @var float
      */
     protected $time = 0;

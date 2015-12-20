@@ -46,10 +46,6 @@ class BingSearch
 
     const TYPE_WEB = 'Web';
     const TYPE_IMAGE = 'Image';
-    const TYPE_VIDEO = 'Video';
-    const TYPE_NEWS = 'News';
-    const TYPE_SPELL = 'Spell';
-    const TYPE_RELATED = 'Related';
 
     const FORMAT_JSON = 'JSON';
     const FORMAT_XML = 'Atom';
@@ -59,6 +55,11 @@ class BingSearch
      * @var string
      */
     protected $uri = 'https://api.datamarket.azure.com/Bing/Search';
+
+    /**
+     * @var string
+     */
+    protected $compositeUri = 'https://api.datamarket.azure.com/Data.ashx/Bing/Search/Composite';
 
     /**
      * ignore_errors can help debug – remove for production
@@ -151,6 +152,39 @@ class BingSearch
             }
             return $result;
         }
+    }
+
+    /**
+     * Get total count of results
+     * @param string $query
+     * @return int
+     */
+    public function getTotal($query)
+    {
+        $requestUri = "{$this->compositeUri}?";
+        $requestUri.= "Sources=" . urlencode("'" . $this->searchType . "'");
+        $query = urlencode("'" . $query . "'");
+        $requestUri.= "&\$format=JSON&Query={$query}&\$top=1";
+
+        $auth = base64_encode("{$this->accountKey}:{$this->accountKey}");
+        $data = array(
+            'http' => array(
+                'request_fulluri' => true,
+                'ignore_errors' => $this->ignoreErrors,
+                'header' => "Authorization: Basic $auth"
+            )
+        );
+
+        $context = stream_context_create($data);
+        $response = file_get_contents($requestUri, 0, $context);
+        $responseArray = json_decode($response, true);
+
+        $result = 0;
+        if (isset($responseArray['d']) && !empty($responseArray['d']['results'])) {
+            $result = $responseArray['d']['results'][0]["{$this->searchType}Total"];
+        }
+
+        return $result;
     }
 
     /**
